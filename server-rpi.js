@@ -8,17 +8,22 @@
 
 const http    = require('http');
 const express = require('express');
+const minimist = require('minimist');
 
 
 const WebStreamerServer = require('./lib/raspivid');
 
 const app  = express();
 
-  //public website
+//public website
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/vendor/dist'));
 
+const argv = minimist(process.argv.slice(2));
+
+console.log("ARGS:", argv);
+
 const server  = http.createServer(app);
-const silence = new WebStreamerServer(server);
+const silence = new WebStreamerServer(server, argv);
 
 server.listen(8080);
